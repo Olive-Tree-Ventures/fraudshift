@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Fraud Shift — Dark Navy Authority Palette */
+    --background: 210 20% 98%; /* #FAFBFC */
+    --background-alt: 214 32% 95%; /* #F1F5F9 */
+    --foreground: 222 47% 11%; /* #0A2540 approx */
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Dark navy primary */
+    --primary: 214 71% 15%; /* #0A2540 */
+    --primary-foreground: 210 20% 98%;
+
+    /* Teal-green accent */
+    --accent: 164 100% 42%; /* #00D4AA */
+    --accent-foreground: 214 71% 15%;
+
+    /* Slate secondary */
+    --secondary: 215 16% 47%; /* #64748B */
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 214 32% 95%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Alert amber */
+    --destructive: 38 92% 50%; /* #F59E0B */
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 164 100% 42%;
+
+    --radius: 0.5rem;
+
+    /* Dark sections */
+    --dark-bg: 195 43% 8%; /* #0c1a1f */
+    --dark-bg-deep: 195 43% 5%;
+
+    /* Sidebar (unused but required) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  .container-narrow {
+    @apply mx-auto max-w-[1200px] px-6 md:px-8;
+  }
+
+  .text-gradient-accent {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(164 100% 42%), hsl(174 80% 50%));
+  }
+
+  .dark-section {
+    background-color: hsl(var(--dark-bg));
+    color: hsl(var(--primary-foreground));
+  }
+
+  .dark-section-deep {
+    background-color: hsl(var(--dark-bg-deep));
+    color: hsl(var(--primary-foreground));
+  }
+
+  .bg-alt {
+    background-color: hsl(var(--background-alt));
+  }
+
+  .dot-pattern {
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .status-dot::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: hsl(var(--accent));
+    margin-right: 10px;
+    box-shadow: 0 0 6px hsl(164 100% 42% / 0.5);
+  }
+
+  .card-service {
+    @apply rounded-lg border border-border bg-card p-6 md:p-8;
+    border-left: 3px solid hsl(var(--accent));
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .card-service:hover {
+    box-shadow: 0 10px 40px -10px hsl(var(--dark-bg) / 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes dashFloat {
+  0%, 100% { transform: rotateY(-2deg) rotateX(1deg) translateY(0); }
+  50% { transform: rotateY(-2deg) rotateX(1deg) translateY(-6px); }
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(26,232,140,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(26,232,140,0); }
+}
