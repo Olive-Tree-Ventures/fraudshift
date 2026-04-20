@@ -5,8 +5,34 @@ import snapptLogo from "@/assets/logos/snappt.png";
 
 const OpsCloverCaseStudySection = () => {
   const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [hovered, setHovered] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || honeypot) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("https://formspree.io/f/meevlokv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email, _gotcha: honeypot }),
+      });
+      if (res.ok) {
+        setSubscribed(true);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
   const isMobile = useIsMobile();
 
   const containerPadding = isMobile ? "0 16px" : "0 40px";
@@ -213,12 +239,26 @@ const OpsCloverCaseStudySection = () => {
           </div>
 
           {!subscribed ?
-          <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap", width: "100%", maxWidth: "400px" }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap", width: "100%", maxWidth: "400px" }}>
+              {/* Honeypot — must stay empty; bots fill it, Formspree rejects them */}
+              <input
+                type="text"
+                name="_gotcha"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+                style={{ display: "none" }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
               <input
               type="email"
+              name="email"
               placeholder="Work email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
               style={{
                 background: "#0F172A",
                 border: "1px solid #1E3A5F",
@@ -232,9 +272,12 @@ const OpsCloverCaseStudySection = () => {
                 outline: "none",
                 fontFamily: "inherit"
               }} />
-            
+              {error && (
+                <div style={{ width: "100%", color: "#F87171", fontSize: "12px" }}>{error}</div>
+              )}
               <button
-              onClick={() => {if (email) setSubscribed(true);}}
+              type="submit"
+              disabled={loading}
               style={{
                 background: "transparent",
                 border: "1px solid #00D4AA",
@@ -243,23 +286,25 @@ const OpsCloverCaseStudySection = () => {
                 color: "#00D4AA",
                 fontSize: "13px",
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: loading ? "not-allowed" : "pointer",
                 fontFamily: "inherit",
                 transition: "all 0.2s",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
+                opacity: loading ? 0.6 : 1,
               }}
               onMouseEnter={(e) => {
-                (e.target as HTMLElement).style.background = "#00D4AA";
-                (e.target as HTMLElement).style.color = "#0F172A";
+                if (!loading) {
+                  (e.target as HTMLElement).style.background = "#00D4AA";
+                  (e.target as HTMLElement).style.color = "#0F172A";
+                }
               }}
               onMouseLeave={(e) => {
                 (e.target as HTMLElement).style.background = "transparent";
                 (e.target as HTMLElement).style.color = "#00D4AA";
               }}>
-              
-                Subscribe
+                {loading ? "Subscribing…" : "Subscribe"}
               </button>
-            </div> :
+            </form> :
 
           <div style={{
             color: "#00D4AA",

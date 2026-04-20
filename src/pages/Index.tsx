@@ -59,7 +59,7 @@ const Hero = () =>
         className="text-[16.5px] leading-[1.7] max-w-[500px] mb-10"
         style={{ color: "#7e9aa8" }}>
         
-          Embedded operations teams — from frontline customer operations to fraud investigations
+          Embedded fraud teams — from frontline customer operations to fraud investigations
           to KYC — for fintech, payments, and iGaming companies where getting it wrong isn't an option.
         </p>
         <div className="flex flex-wrap gap-4">

@@ -26,7 +26,7 @@ const timelineOptions = ["ASAP", "1–2 months", "3+ months", "Just exploring"];
 
 const initialForm = {
   name: "", email: "", company: "", industry: "", workflows: [] as string[],
-  size: "", timeline: "", notes: "",
+  size: "", timeline: "", notes: "", honeypot: "",
 };
 
 const Contact = () => {
@@ -43,7 +43,7 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (submitting) return;
+    if (submitting || form.honeypot) return;
     setSubmitting(true);
     try {
       const res = await fetch("https://formspree.io/f/mnjornao", {
@@ -58,6 +58,7 @@ const Contact = () => {
           estimated_team_size: form.size,
           timeline: form.timeline,
           additional_notes: form.notes,
+          _gotcha: form.honeypot,
         }),
       });
       if (!res.ok) throw new Error("Submission failed");
@@ -112,6 +113,16 @@ const Contact = () => {
             onSubmit={handleSubmit}
             className="max-w-2xl mx-auto space-y-6"
           >
+            {/* Honeypot — must stay empty; bots fill it, Formspree rejects them */}
+            <input
+              type="text"
+              name="_gotcha"
+              value={form.honeypot}
+              onChange={(e) => setForm({ ...form, honeypot: e.target.value })}
+              style={{ display: "none" }}
+              tabIndex={-1}
+              autoComplete="off"
+            />
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium mb-1.5">Name</label>
