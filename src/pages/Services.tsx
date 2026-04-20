@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { Shield, Fingerprint, MessageCircle, Scale, ArrowRight } from "lucide-react";
@@ -62,9 +63,50 @@ const steps = [
   { num: "04", title: "Scale", desc: "Add seats, languages, shift coverage, and specialization as volume grows." },
 ];
 
+const servicesJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "name": "Fraud & Risk Operations",
+      "description": "Human-in-the-loop fraud operations. Triage, investigations, manual review decisions, and escalation governance. Alert queue review, case documentation, and QA for decision consistency.",
+      "provider": { "@type": "Organization", "name": "Fraud Shift", "url": "https://fraudshift.com" },
+      "serviceType": "Fraud Operations",
+      "areaServed": "Worldwide",
+    },
+    {
+      "@type": "Service",
+      "name": "Identity Operations",
+      "description": "Onboarding and verification operations with audit-ready process rigor. Document review, KYC/KYB verification, and compliance workflows built to scale throughput without sacrificing quality.",
+      "provider": { "@type": "Organization", "name": "Fraud Shift", "url": "https://fraudshift.com" },
+      "serviceType": "Identity Verification",
+      "areaServed": "Worldwide",
+    },
+    {
+      "@type": "Service",
+      "name": "Dispute Operations",
+      "description": "End-to-end dispute and chargeback operations. Intake, evidence gathering, packet assembly, deadline management, and outcome reporting.",
+      "provider": { "@type": "Organization", "name": "Fraud Shift", "url": "https://fraudshift.com" },
+      "serviceType": "Dispute Management",
+      "areaServed": "Worldwide",
+    },
+    {
+      "@type": "Service",
+      "name": "Frontline Support",
+      "description": "Payments-literate, compliance-aware support teams with queue discipline, SLA tracking, knowledge management, and escalation governance for fintech and regulated industries.",
+      "provider": { "@type": "Organization", "name": "Fraud Shift", "url": "https://fraudshift.com" },
+      "serviceType": "Customer Support Operations",
+      "areaServed": "Worldwide",
+    },
+  ],
+};
+
 const Services = () => (
   <>
     <SEO title="Services | Fraud Shift" description="Fraud operations, identity verification, dispute management, and frontline support teams built for fintech and payments companies. Managed with SLAs, QA, and compliance rigor." path="/services" />
+    <Helmet>
+      <script type="application/ld+json">{JSON.stringify(servicesJsonLd)}</script>
+    </Helmet>
     {/* Hero */}
     <section className="dark-section pt-32 pb-16 md:pt-44 md:pb-24">
       <div className="container-narrow">
