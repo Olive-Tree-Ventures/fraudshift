@@ -14,26 +14,32 @@ import Layout from "./components/Layout.tsx";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+// AppContent contains everything except the router so entry-server.tsx can
+// wrap it in StaticRouter during pre-rendering.
+export const AppContent = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/industries" element={<Industries />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/our-people" element={<OurPeople />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+      <ScrollToTop />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/industries" element={<Industries />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/our-people" element={<OurPeople />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
     </TooltipProvider>
   </QueryClientProvider>
+);
+
+const App = () => (
+  <BrowserRouter>
+    <AppContent />
+  </BrowserRouter>
 );
 
 export default App;
