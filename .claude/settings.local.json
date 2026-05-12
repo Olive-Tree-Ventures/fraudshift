@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -E \"\\\\.\\(html|css|js|jsx|ts|tsx|json|xml|txt\\)$\")"
+      "Bash(grep -E \"\\\\.\\(html|css|js|jsx|ts|tsx|json|xml|txt\\)$\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh api *)",
+      "WebFetch(domain:api.github.com)"
     ]
   }
 }
