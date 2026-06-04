@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import belgradeHero from "@/assets/belgrade-hero.png";
+import belgradeHero from "@/assets/belgrade-hero.webp";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },

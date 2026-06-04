@@ -5,7 +5,7 @@ declare global {
   }
 }
 
-const GA_ID = "G-FXJ19GPV04";
+const GA_ID = "G-7CYB5WHVZW";
 
 const isClient = () =>
   typeof window !== "undefined" && typeof window.gtag === "function";
@@ -26,19 +26,13 @@ export const event = (name: string, params: Record<string, any> = {}) => {
 export const grantConsent = () => {
   if (!isClient()) return;
   window.gtag("consent", "update", {
-    ad_storage: "granted",
-    ad_user_data: "granted",
-    ad_personalization: "granted",
     analytics_storage: "granted",
   });
 };
 
 export const denyConsent = () => {
   if (!isClient()) return;
-  window.gtag("consent", "update",  {
-    ad_storage: "denied",
-    ad_user_data: "denied",
-    ad_personalization: "denied",
+  window.gtag("consent", "update", {
     analytics_storage: "denied",
   });
 };

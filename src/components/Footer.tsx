@@ -46,22 +46,25 @@ const Footer = () => (
             Connect
           </span>
           <a
-            href="#"
+            href="https://www.linkedin.com/company/fraud-shift"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-primary-foreground/70 hover:text-accent transition-colors"
           >
             <Linkedin size={16} /> LinkedIn
           </a>
           <p className="text-sm text-primary-foreground/60 mt-2">
             Need pipeline?{" "}
-            <a href="#" className="text-accent hover:underline">
+            <a href="https://www.salesclover.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
               Meet Sales Clover →
             </a>
           </p>
         </div>
       </div>
 
-      <div className="mt-12 pt-6 border-t border-primary-foreground/10 text-xs text-primary-foreground/30">
-        © 2026 Olive Tree Ventures. All rights reserved.
+      <div className="mt-12 pt-6 border-t border-primary-foreground/10 text-xs text-primary-foreground/30 flex flex-wrap items-center justify-between gap-3">
+        <span>© 2026 Olive Tree Ventures. All rights reserved.</span>
+        <Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
       </div>
     </div>
   </footer>

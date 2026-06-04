@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { grantConsent, denyConsent } from "@/lib/analytics";
+import { grantConsent, denyConsent, pageview } from "@/lib/analytics";
 
 const STORAGE_KEY = "fs_consent_v1";
 
@@ -25,6 +25,7 @@ export const CookieConsent = () => {
   const accept = () => {
     window.localStorage.setItem(STORAGE_KEY, "granted");
     grantConsent();
+    pageview(window.location.pathname + window.location.search);
     setVisible(false);
   };
 

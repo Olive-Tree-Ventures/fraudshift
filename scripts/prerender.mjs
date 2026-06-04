@@ -23,6 +23,10 @@ const routes = [
   "/about",
   "/our-people",
   "/contact",
+  "/privacy",
+  "/use-cases/igaming",
+  "/use-cases/psp-payments",
+  "/use-cases/crypto-stablecoin",
 ];
 
 // Dynamically import the SSR bundle produced by `vite build --ssr`
