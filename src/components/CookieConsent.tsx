@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { grantConsent, denyConsent, pageview } from "@/lib/analytics";
+import { getCountry } from "@/lib/geo";
 
 const STORAGE_KEY = "fs_consent_v1";
 
 export const CookieConsent = () => {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [bannerType, setBannerType] = useState<"informational" | "consent">("consent");
 
   // Two-phase mount: ensures we never render different HTML on server vs client
   useEffect(() => {
@@ -14,13 +16,41 @@ export const CookieConsent = () => {
 
   useEffect(() => {
     if (!mounted) return;
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (!stored) {
-      const t = setTimeout(() => setVisible(true), 1200);
-      return () => clearTimeout(t);
+
+    // 1. GPC — wins over everything, including a previously stored "granted"
+    if ((navigator as any).globalPrivacyControl === true) {
+      denyConsent();
+      window.localStorage.setItem(STORAGE_KEY, "denied");
+      return;
     }
-    if (stored === "granted") grantConsent();
+
+    // 2. Stored preference from a prior visit
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored === "granted") { grantConsent(); return; }
+    if (stored === "denied") return;
+
+    // 3. First visit — prefetch geo now so cache is warm before the 1200ms fires
+    getCountry();
+
+    let cancelled = false;
+    const t = setTimeout(async () => {
+      const country = await getCountry(); // instant: already cached above
+      if (cancelled) return;
+      if (country === "US") {
+        grantConsent();
+        pageview(window.location.pathname + window.location.search);
+        window.localStorage.setItem(STORAGE_KEY, "granted");
+        setBannerType("informational");
+      } else {
+        setBannerType("consent");
+      }
+      setVisible(true);
+    }, 1200);
+
+    return () => { cancelled = true; clearTimeout(t); };
   }, [mounted]);
+
+  const dismiss = () => setVisible(false);
 
   const accept = () => {
     window.localStorage.setItem(STORAGE_KEY, "granted");
@@ -74,8 +104,7 @@ export const CookieConsent = () => {
           className="text-[13.5px] leading-[1.6] mb-4"
           style={{ color: "#c8d4da" }}
         >
-          We use analytics cookies to understand how this site is used and improve it.
-          Nothing tracks until you choose.{" "}
+          We use analytics cookies to understand how this site is used and improve it.{" "}
           <a
             href="/privacy"
             className="underline underline-offset-2 transition-colors"
@@ -85,22 +114,34 @@ export const CookieConsent = () => {
           </a>
         </p>
         <div className="flex items-center gap-1.5 justify-end">
-          <button
-            onClick={decline}
-            className="px-3 py-2 text-[12.5px] font-medium rounded-md transition-colors"
-            style={{ color: "#7e9aa8" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#e8edf0")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#7e9aa8")}
-          >
-            Decline
-          </button>
-          <button
-            onClick={accept}
-            className="px-4 py-2 text-[12.5px] font-semibold rounded-md transition-opacity hover:opacity-90"
-            style={{ background: "#00D69D", color: "#0c1a1f" }}
-          >
-            Accept
-          </button>
+          {bannerType === "informational" ? (
+            <button
+              onClick={dismiss}
+              className="px-4 py-2 text-[12.5px] font-semibold rounded-md transition-opacity hover:opacity-90"
+              style={{ background: "#00D69D", color: "#0c1a1f" }}
+            >
+              Got it
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={decline}
+                className="px-3 py-2 text-[12.5px] font-medium rounded-md transition-colors"
+                style={{ color: "#7e9aa8" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#e8edf0")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#7e9aa8")}
+              >
+                Decline
+              </button>
+              <button
+                onClick={accept}
+                className="px-4 py-2 text-[12.5px] font-semibold rounded-md transition-opacity hover:opacity-90"
+                style={{ background: "#00D69D", color: "#0c1a1f" }}
+              >
+                Accept
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
